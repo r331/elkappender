@@ -1,0 +1,40 @@
+<configuration>
+
+    <timestamp key="byDayHH" datePattern="yyyyMMdd'T'HHmmss"/>
+    <timestamp key="byDay" datePattern="yyyyMMdd"/>
+
+    <appender name="FILE2" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logAuthMod.txt</file>
+        <append>true</append>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>logAuthMod.%d{yyyy-MM-dd}.%i.txt</fileNamePattern>
+            <maxFileSize>20MB</maxFileSize>
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>1GB</totalSizeCap>
+        </rollingPolicy>
+        <!--encoder class="net.logstash.logback.encoder.LogstashEncoder"/-->
+    </appender>
+    <appender name="STASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+        <destinatiolappendern>127.0.0.1:5000</destinatiolappendern>
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder" />
+    </appender>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!--logger name="org.springframework" level="DEBUG"/-->
+
+    <root level="INFO">
+        <!--appender-ref ref="FILE2"/-->
+        <appender-ref ref="STASH"/>
+        <appender-ref ref="STDOUT"/>
+    </root>
+
+</configuration>
